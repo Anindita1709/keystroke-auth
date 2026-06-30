@@ -2,6 +2,6 @@
 import logging
 
 __version__ = "0.1.0"
-__author__  = "Your Name"
+__author__  = "APK"
 
 logging.getLogger(__name__).addHandler(logging.NullHandler())
