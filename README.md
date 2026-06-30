@@ -6,7 +6,7 @@ project compares **One-Class SVM** (novelty detection, trained only on the
 genuine user) against **Binary SVM** (genuine vs. impostor classification)
 as biometric authenticators.
 
-[![CI](https://github.com/yourusername/keystroke-auth/actions/workflows/ci.yml/badge.svg)](https://github.com/yourusername/keystroke-auth/actions/workflows/ci.yml)
+[![CI](https://github.com/Anindita1709/keystroke-auth/actions/workflows/ci.yml/badge.svg)](https://github.com/Anindita1709/keystroke-auth/actions/workflows/ci.yml)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
