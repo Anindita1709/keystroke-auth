@@ -1,0 +1,26 @@
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Dataset (downloaded at runtime, not committed)
+DSL-StrongPasswordData.csv
+
+# Generated outputs
+figures/
+*.csv
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
+*.swp
