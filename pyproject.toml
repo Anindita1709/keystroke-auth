@@ -36,7 +36,7 @@ dev = [
 ]
 
 [project.urls]
-Repository = "https://github.com/yourusername/keystroke-auth"
+Repository = "https://github.com/Anindita1709/keystroke-auth"
 
 [tool.setuptools.packages.find]
 include = ["keystroke_auth*"]
