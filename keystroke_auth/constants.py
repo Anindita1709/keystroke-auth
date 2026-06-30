@@ -1,8 +1,5 @@
 """
 Global constants shared across all modules.
-
-Centralising these avoids magic strings scattered across the codebase and
-makes it trivial to swap in a different dataset or feature set later.
 """
 from pathlib import Path
 
