@@ -1,8 +1,5 @@
 """
 Equal Error Rate (EER) computation.
-
-Kept in its own module (no model imports) to break the potential circular
-dependency: models → eer ← evaluation/system → models.
 """
 import logging
 from typing import Any
@@ -14,41 +11,15 @@ from sklearn.metrics import auc, roc_curve
 
 logger = logging.getLogger(__name__)
 
-
 def compute_eer(
     scores_genuine: np.ndarray,
     scores_impostor: np.ndarray,
 ) -> dict[str, Any]:
     """
-    Compute the Equal Error Rate and full ROC arrays.
-
-    Definitions
-    -----------
     FAR  (False Acceptance Rate) = impostors accepted  = FPR on the ROC curve
     FRR  (False Rejection Rate)  = genuine users rejected = 1 − TPR
     EER  = operating point where FAR == FRR
-
-    Lower EER → better system.
-
-    Benchmark (Killourhy & Maxion, 2009 CMU paper):
-        Most classical detectors score 10–20% EER on this dataset.
-
-    Parameters
-    ----------
-    scores_genuine  : 1-D array of SVM decision scores for genuine samples.
-                      Positive = model says "genuine"; negative = "impostor".
-    scores_impostor : 1-D array of SVM decision scores for impostor samples.
-
-    Returns
-    -------
-    dict with keys:
-        eer            : float  — Equal Error Rate in [0, 1] (NaN if undefined).
-        eer_threshold  : float  — Decision score at the EER operating point.
-        auc            : float  — Area Under the ROC curve.
-        fpr            : ndarray — False positive rates (FAR).
-        tpr            : ndarray — True positive rates.
-        frr            : ndarray — False rejection rates  (= 1 − tpr).
-        thresholds     : ndarray — Corresponding decision thresholds.
+    Lower EER -> better system.
     """
     scores = np.concatenate([scores_genuine, scores_impostor])
     labels = np.concatenate([
@@ -63,7 +34,6 @@ def compute_eer(
     try:
         # Numerically find the crossing point FAR = FRR via root-finding.
         # Using brentq (bracketed Brent's method) on the interpolated curve
-        # is more accurate than simply picking the nearest index.
         eer       = brentq(lambda x: float(interp1d(fpr, frr)(x)) - x, 0.0, 1.0)
         idx       = int(np.argmin(np.abs(fpr - eer)))
         eer_thresh = float(thresholds[idx])
