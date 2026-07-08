@@ -1,8 +1,5 @@
 """
 Keystroke timing feature engineering.
-
-Derives 10 statistical and rhythm features on top of the 31 raw timing columns,
-giving the models richer signal with minimal domain assumptions.
 """
 import logging
 
@@ -18,7 +15,6 @@ _DD_COLS:   list[str] = [c for c in RAW_FEATURES if c.startswith("DD.")]
 _UD_COLS:   list[str] = [c for c in RAW_FEATURES if c.startswith("UD.")]
 
 #: Full feature list after engineering  (raw + derived).
-#: Import this wherever you need the canonical feature column list.
 ENGINEERED_FEATURES: list[str] = RAW_FEATURES + [
     "mean_hold", "std_hold",  "max_hold",
     "mean_dd",   "std_dd",    "min_dd",
@@ -29,8 +25,6 @@ ENGINEERED_FEATURES: list[str] = RAW_FEATURES + [
 
 def engineer_features(df: pd.DataFrame) -> pd.DataFrame:
     """
-    Append 10 derived columns to the raw timing DataFrame.
-
     Feature          Group            What it captures
     ───────────────  ───────────────  ────────────────────────────────────────
     mean/std/max     Hold times       Key-press firmness and variability
@@ -40,14 +34,6 @@ def engineer_features(df: pd.DataFrame) -> pd.DataFrame:
     total_time       Sum of DD + H.R  Overall password entry speed
     rhythm_cv        std/mean of DD   Consistency of cadence (CV)
 
-    Parameters
-    ----------
-    df : DataFrame with all RAW_FEATURES columns present.
-
-    Returns
-    -------
-    New DataFrame with original columns plus the 10 derived columns.
-    Does NOT modify the input in-place.
     """
     df = df.copy()
 
