@@ -1,5 +1,5 @@
 """
-System-wide evaluation: run authentication for every user as the genuine
+run  One-Class SVM authentication for every user as the genuine
 subject and aggregate results into a single performance summary.
 """
 import logging
@@ -21,29 +21,7 @@ def evaluate_all_users(
     gamma: str | float = "scale",
     save_path: Path | str | None = "system_results.csv",
 ) -> pd.DataFrame:
-    """
-    Run One-Class SVM authentication for every subject in the dataset,
-    treating each in turn as the genuine user.
 
-    Expected results on the CMU dataset (Killourhy & Maxion, 2009 benchmark):
-        Raw features only     → mean EER ≈ 13–17%
-        + engineered features → mean EER ≈ 10–14%
-
-    Parameters
-    ----------
-    df        : Full CMU DataFrame (all subjects).
-    features  : Feature columns to use.
-    nu        : One-Class SVM nu hyperparameter (shared across all users for
-                a fair system-wide comparison; per-user tuning would inflate
-                results unrealistically).
-    gamma     : One-Class SVM gamma hyperparameter.
-    save_path : Where to write the per-user results CSV. Pass None to skip.
-
-    Returns
-    -------
-    pd.DataFrame with columns: user, eer, auc, n_sv — one row per subject
-    that was successfully evaluated.
-    """
     subjects = df["subject"].unique()
     records: list[dict[str, Any]] = []
 
@@ -72,9 +50,8 @@ def evaluate_all_users(
 
     return results_df
 
-
 def _log_summary(results_df: pd.DataFrame) -> None:
-    """Print a formatted summary of system-wide EER statistics."""
+   
     if results_df.empty:
         logger.warning("No users were successfully evaluated.")
         return
