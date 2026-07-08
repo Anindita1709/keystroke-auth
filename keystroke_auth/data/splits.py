@@ -1,7 +1,5 @@
 """
 Train / validation / test splitting and impostor sampling.
-
-All split logic lives here so the rest of the codebase stays dataset-agnostic.
 """
 import logging
 
@@ -12,7 +10,6 @@ from keystroke_auth.constants import TRAIN_SESSION_END, VAL_SESSION_END
 
 logger = logging.getLogger(__name__)
 
-
 def session_split(
     df: pd.DataFrame,
     user: str,
@@ -22,29 +19,6 @@ def session_split(
 ) -> dict[str, np.ndarray]:
     """
     Split a user's data chronologically by session index.
-
-    Partitions
-    ----------
-    sessions 1 – train_end        → "train"
-    sessions train_end+1 – val_end → "val"
-    sessions val_end+1 – 8        → "test"  (never touched during tuning)
-
-    Why not random split?
-        Keystroke timing improves with practice. A random split leaks future
-        consistency into training, inflating all reported metrics. The
-        session-based protocol matches Killourhy & Maxion (2009).
-
-    Parameters
-    ----------
-    df        : Full CMU dataframe (all subjects).
-    user      : Subject ID string (e.g. "s002").
-    features  : Column names to extract.
-    train_end : Last session index that belongs to training.
-    val_end   : Last session index that belongs to validation.
-
-    Returns
-    -------
-    dict with keys "train", "val", "test" → np.ndarray of shape (n, n_features).
     """
     u = df[df["subject"] == user]
 
@@ -63,7 +37,6 @@ def session_split(
     )
     return splits
 
-
 def sample_impostors(
     df: pd.DataFrame,
     genuine_user: str,
@@ -75,22 +48,6 @@ def sample_impostors(
     Draw n timing records from every subject except genuine_user,
     sampled evenly across all other subjects.
 
-    Usage context
-    -------------
-    One-Class SVM : call this ONLY at evaluation time, never during training.
-    Binary SVM    : call this during training to create the negative class.
-
-    Parameters
-    ----------
-    df            : Full CMU dataframe.
-    genuine_user  : The subject whose records must be excluded.
-    features      : Column names to extract.
-    n             : Total number of impostor rows to return.
-    random_state  : Seed for reproducibility.
-
-    Returns
-    -------
-    np.ndarray of shape (≤n, n_features).
     """
     rng    = np.random.default_rng(random_state)
     others = [u for u in df["subject"].unique() if u != genuine_user]
