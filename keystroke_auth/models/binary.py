@@ -1,8 +1,4 @@
 """
-Binary SVM classifier: genuine user (y=1) vs impostor samples (y=0).
-
-Used as a comparison baseline against the One-Class SVM.
-
 Trade-off vs One-Class SVM
 ──────────────────────────
 Advantage  : Usually achieves lower EER because it directly models the
@@ -33,7 +29,6 @@ _DEFAULT_PARAM_GRID: dict[str, list] = {
     "kernel": ["rbf", "linear"],
 }
 
-
 def train_binary_svm(
     df: pd.DataFrame,
     user: str,
@@ -43,31 +38,10 @@ def train_binary_svm(
     random_state: int = 42,
 ) -> dict[str, Any]:
     """
-    Train a Binary SVM and evaluate on the held-out test session.
-
     Training set  : genuine user (y=1) + balanced impostor sample (y=0)
     Tuning        : GridSearchCV with StratifiedKFold, scored by ROC-AUC
     class_weight  : 'balanced' to handle any residual label imbalance
 
-    Parameters
-    ----------
-    df           : Full CMU DataFrame.
-    user         : Subject to treat as the genuine user.
-    features     : Feature columns.
-    param_grid   : Override the default C / gamma / kernel search space.
-    cv_folds     : Number of folds for StratifiedKFold.
-    random_state : Seed for reproducibility.
-
-    Returns
-    -------
-    dict with keys:
-        model       : best fitted SVC
-        scaler      : fitted StandardScaler
-        best_params : dict of best hyperparameters found
-        cv_auc      : best cross-validated ROC-AUC score
-        eer         : Equal Error Rate on the test session
-        auc         : ROC-AUC on the test session
-        fpr, tpr, frr : ROC arrays for plotting
     """
     param_grid = param_grid or _DEFAULT_PARAM_GRID
     splits = session_split(df, user, features)
