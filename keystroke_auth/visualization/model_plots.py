@@ -14,16 +14,6 @@ logger = logging.getLogger(__name__)
 def plot_tuning_heatmap(tuning_df: pd.DataFrame, show: bool = True) -> None:
     """
     Heatmap of validation EER across the nu × gamma grid search.
-
-    Use this in interviews to explain hyperparameter sensitivity: a smooth
-    gradient means the model is robust to small parameter changes; sharp
-    transitions mean careful tuning is necessary.
-
-    Parameters
-    ----------
-    tuning_df : Output of tune_one_class_svm — must have columns
-                'nu', 'gamma', 'eer'.
-    show      : Whether to call plt.show() after saving.
     """
     pivot = tuning_df.pivot_table(index="nu", columns="gamma",
                                    values="eer", aggfunc="mean")
@@ -50,20 +40,9 @@ def plot_score_distributions(
     show: bool = True,
 ) -> None:
     """
-    Plot genuine vs. impostor decision-score histograms.
-
-    The overlap region between the two histograms IS the authentication
-    error — in a perfect system they would not overlap at all, and the
-    overlap area roughly equals 2 × EER.
-
-    Parameters
-    ----------
-    scores_gen : Decision scores for genuine test samples.
-    scores_imp : Decision scores for impostor test samples.
-    eer        : Computed Equal Error Rate (used to draw the threshold line).
-    user_id    : Subject ID, used in the title and filename.
-    model_name : e.g. "One-Class SVM" — shown in the title.
-    show       : Whether to call plt.show() after saving.
+    genuine vs. impostor decision-score histograms.
+    The overlap region between the two histograms IS the authentication error
+    
     """
     fig, ax = plt.subplots(figsize=(10, 5))
 
@@ -92,19 +71,15 @@ def plot_det_roc(
     show: bool = True,
 ) -> None:
     """
-    Side-by-side ROC and DET (Detection Error Tradeoff) curves comparing
+    ROC and DET (Detection Error Tradeoff) curves comparing
     One-Class SVM against Binary SVM.
 
     The DET curve is the standard chart in biometrics — it plots FAR vs FRR
     and marks the EER as the point closest to the diagonal.
-
-    Parameters
-    ----------
     oc_metrics  : Output of compute_eer() for the One-Class SVM.
     bin_metrics : Output of compute_eer()-equivalent dict for Binary SVM,
                   or None to plot One-Class SVM alone.
-    user_id     : Subject ID, used in titles and filename.
-    show        : Whether to call plt.show() after saving.
+    
     """
     fig, axes = plt.subplots(1, 2, figsize=(13, 5))
 
