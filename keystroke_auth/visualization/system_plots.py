@@ -14,16 +14,6 @@ def plot_system_eer(results_df: pd.DataFrame, show: bool = True) -> None:
     Plot the EER distribution and a sorted per-user ranking across all
     evaluated subjects.
 
-    Left panel  : histogram of EER values with the mean marked — shows
-                  whether errors are tightly clustered or long-tailed.
-    Right panel : sorted horizontal bar chart — identifies which specific
-                  users are hardest to authenticate (useful for a
-                  "what would you investigate next" interview follow-up).
-
-    Parameters
-    ----------
-    results_df : Output of evaluate_all_users() — must have an 'eer' column.
-    show       : Whether to call plt.show() after saving.
     """
     mean_eer = results_df["eer"].mean() * 100
 
