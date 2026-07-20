@@ -71,11 +71,10 @@ def plot_det_roc(
     show: bool = True,
 ) -> None:
     """
-    ROC and DET (Detection Error Tradeoff) curves comparing
+    ROC and DET (Detection Error Tradeoff plots FAR vs FRR
+    and marks the EER as the point closest to the diagonal) curves comparing
     One-Class SVM against Binary SVM.
 
-    The DET curve is the standard chart in biometrics — it plots FAR vs FRR
-    and marks the EER as the point closest to the diagonal.
     oc_metrics  : Output of compute_eer() for the One-Class SVM.
     bin_metrics : Output of compute_eer()-equivalent dict for Binary SVM,
                   or None to plot One-Class SVM alone.
