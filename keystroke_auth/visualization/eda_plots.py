@@ -1,4 +1,4 @@
-"""Exploratory data analysis plots: timing distributions, user similarity, PCA."""
+
 import logging
 
 import numpy as np
@@ -13,7 +13,6 @@ from keystroke_auth.visualization._style import save_and_show, BLUE, ORANGE
 
 logger = logging.getLogger(__name__)
 
-
 def run_eda(df: pd.DataFrame, n_users: int = 5, show: bool = True) -> None:
     """
     Plot keystroke timing histograms for the first n_users, one subplot
@@ -24,12 +23,6 @@ def run_eda(df: pd.DataFrame, n_users: int = 5, show: bool = True) -> None:
     If two users' distributions overlap heavily on every feature, even a
     perfect classifier cannot separate them — that's a limit of the
     biometric signal itself, not a modelling failure.
-
-    Parameters
-    ----------
-    df      : Full CMU DataFrame.
-    n_users : Number of subjects to overlay (keep ≤6 for readability).
-    show    : Whether to call plt.show() after saving.
     """
     subjects = df["subject"].unique()[:n_users]
     candidate_feats = ["H.period", "H.t", "H.i", "DD.period.t", "DD.t.i", "total_time"]
@@ -65,10 +58,6 @@ def plot_user_heatmap(df: pd.DataFrame, show: bool = True) -> None:
     Dark cells indicate users with similar typing rhythm — these pairs
     are the hardest for any model (SVM or otherwise) to separate.
 
-    Parameters
-    ----------
-    df   : Full CMU DataFrame.
-    show : Whether to call plt.show() after saving.
     """
     means = df.groupby("subject")[RAW_FEATURES].mean().values
     dist  = np.mean(np.abs(means[:, None, :] - means[None, :, :]), axis=2)
@@ -100,13 +89,6 @@ def plot_pca(
     A tight, well-separated genuine cluster predicts a low EER.
     A diffuse cluster overlapping impostors predicts a high EER.
 
-    Parameters
-    ----------
-    df          : Full CMU DataFrame.
-    user        : Genuine subject ID.
-    features    : Feature columns to use.
-    n_impostors : Number of impostor rows to sample for contrast.
-    show        : Whether to call plt.show() after saving.
     """
     scaler = StandardScaler()
     X_gen  = df[df["subject"] == user][features].values
